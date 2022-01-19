@@ -14,7 +14,7 @@
 
 'use strict';
 
-const movieDB = {
+let movieDB = {
     movies: [
         "Логан",
         "Лига справедливости",
@@ -35,14 +35,45 @@ promoBg.querySelector('div').innerHTML = "Драма";
 
 promoBg.style.cssText = "background: url(../img/bg.jpg)";
 
-let promoInteractiveItem = document.querySelectorAll('.promo__interactive-item');
-
 function addMovies(obj) {
-obj.movies.sort();
-
-        promoInteractiveItem.forEach((item,i) => {
-            item.textContent = `${i+1}) ${obj.movies[i]}`;
-        });  
+    let promoInteractiveItem = document.querySelectorAll('.promo__interactive-item');
+    promoInteractiveItem.forEach(item => {
+        item.remove();
+    });
+    obj.movies.sort();
+    obj.movies.forEach((item, i) => {
+        document.querySelector('.promo__interactive-list').innerHTML += `
+        <li class="promo__interactive-item">${i + 1}) ${item}
+                            <div class="delete"></div>
+                        </li>
+        `;
+    });
 }
 
 addMovies(movieDB);
+
+let buttonPress = document.querySelector('.add').querySelector('button');
+buttonPress.addEventListener('click', addMoviesInPage);
+
+function addMoviesInPage(EO) {
+    EO = EO || window.event;
+    let addingInput = document.querySelector('.adding__input');
+    let val = addingInput.value;
+    if(val.length > 21){
+        val=val.slice(0,val.length-3)+'...';
+    }
+    addingInput.value = '';
+    movieDB.movies.push(val);
+    addMovies(movieDB);
+}
+
+let buttonDelete = document.querySelectorAll('.delete');
+buttonDelete.forEach(item=>{
+    item.addEventListener('click',deleteMovie);
+});
+
+function deleteMovie(EO){
+    EO=EO||window.event;
+    EO.target.parentNode.remove();
+}
+
