@@ -67,13 +67,13 @@ function addMoviesInPage(EO) {
     addMovies(movieDB);
 }
 
-let buttonDelete = document.querySelectorAll('.delete');
-buttonDelete.forEach(item=>{
-    item.addEventListener('click',deleteMovie);
-});
+// let buttonDelete = document.querySelectorAll('.delete');
+// buttonDelete.forEach(item=>{
+//     item.addEventListener('click',deleteMovie);
+// });
 
-function deleteMovie(EO){
-    EO=EO||window.event;
-    EO.target.parentNode.remove();
-}
+// function deleteMovie(EO){
+//     EO=EO||window.event;
+//     EO.target.parentNode.remove();
+// }
 
