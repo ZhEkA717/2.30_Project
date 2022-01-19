@@ -1,17 +1,3 @@
-/* Задания на урок:
-
-1) Удалить все рекламные блоки со страницы (правая часть сайта)
-
-2) Изменить жанр фильма, поменять "комедия" на "драма"
-
-3) Изменить задний фон постера с фильмом на изображение "bg.jpg". Оно лежит в папке img.
-Реализовать только при помощи JS
-
-4) Список фильмов на странице сформировать на основании данных из этого JS файла.
-Отсортировать их по алфавиту 
-
-5) Добавить нумерацию выведенных фильмов */
-
 'use strict';
 
 let movieDB = {
@@ -25,7 +11,6 @@ let movieDB = {
 };
 
 let recBlocks = document.getElementsByClassName('promo__adv')[0];
-// recBlocks.querySelector('div').remove();
 recBlocks.querySelectorAll('img').forEach(item => {
     item.remove();
 });
@@ -43,7 +28,7 @@ function addMovies(obj) {
     obj.movies.sort();
     obj.movies.forEach((item, i) => {
         document.querySelector('.promo__interactive-list').innerHTML += `
-        <li class="promo__interactive-item">${i + 1}) ${item}
+        <li class="promo__interactive-item">${i+1}) ${item}
                             <div class="delete"></div>
                         </li>
         `;
@@ -57,23 +42,49 @@ buttonPress.addEventListener('click', addMoviesInPage);
 
 function addMoviesInPage(EO) {
     EO = EO || window.event;
+    EO.preventDefault();
     let addingInput = document.querySelector('.adding__input');
-    let val = addingInput.value;
-    if(val.length > 21){
-        val=val.slice(0,val.length-3)+'...';
+    let val = addingInput.value.toUpperCase();
+    if (val.length > 21) {
+        val = val.slice(0, val.length - 3) + '...';
     }
-    addingInput.value = '';
-    movieDB.movies.push(val);
-    addMovies(movieDB);
+    if (val != '') {
+        addingInput.value = '';
+        let movieArray = movieDB.movies;
+        movieArray.push(val);
+        addMovies(movieDB);
+        document.querySelectorAll('input').forEach(item=>{
+            if(item.type=='checkbox'){
+                if(item.checked){
+                    alert('Добавляем любимый фильм');
+                }
+            }
+        });
+    }
+   
+    document.querySelectorAll('.delete').forEach(item => {
+        item.addEventListener('click', deleteMovie);
+    });
 }
 
-// let buttonDelete = document.querySelectorAll('.delete');
-// buttonDelete.forEach(item=>{
-//     item.addEventListener('click',deleteMovie);
-// });
 
-// function deleteMovie(EO){
-//     EO=EO||window.event;
-//     EO.target.parentNode.remove();
-// }
+document.querySelectorAll('.delete').forEach(item => {
+    item.addEventListener('click', deleteMovie);
+});
+
+function deleteMovie(EO) {
+    EO = EO || window.event;
+    EO.target.parentNode.remove();
+    let delClick = EO.target.parentNode.textContent.trim().slice(3);
+    movieDB.movies.forEach((item, i, mas) => {
+        if (item == delClick) {
+            mas.splice(i, 1);
+        }
+    });
+    EO.target.parentNode.remove();
+    addMovies(movieDB);
+    document.querySelectorAll('.delete').forEach(item => {
+        item.addEventListener('click', deleteMovie);
+    });
+}
 
